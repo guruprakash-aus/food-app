@@ -1,6 +1,9 @@
-POST http://localhost:8080/product
+POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-    "name": "product name"
+    "name": "iPad",
+    "description": "A tablet",
+    "stock": 100,
+    "price": 1600
 }
