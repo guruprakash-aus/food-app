@@ -1,3 +1,4 @@
+### Create A Product
 POST http://localhost:8080/products
 Content-Type: application/json
 
@@ -7,3 +8,27 @@ Content-Type: application/json
     "stock": 100,
     "price": 1600
 }
+
+### Get all Products
+GET http://localhost:8080/products?limit=100&offset=0
+Content-Type: application/json
+
+### Get A Product By Id
+GET http://localhost:8080/products/2
+Content-Type: application/json
+
+### Update A Product
+PATCH http://localhost:8080/products/3
+Content-Type: application/json
+
+{
+    "name": "Android",
+    "description": "Samsung S21+",
+    "stock": 55,
+    "price": 1350
+
+}
+
+### Delete a Product
+DELETE http://localhost:8080/products/1
+Content-Type: application/json
