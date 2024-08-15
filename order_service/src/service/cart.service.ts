@@ -1,23 +1,56 @@
-import { CartRepositoryType } from "../types/repository.type"
+import { CartLineItem } from "../db/schema";
+import { CartEditRequestInput, CartRequestInput } from "../dto/cartRequest.dto";
+import { CartRepositoryType } from "../repository/cart.repository";
+// import { CartRepositoryType } from "../types/repository.type";
+import { logger, NotFoundError } from "../utils";
+import { GetProductDetails } from "../utils/broker";
 
-export const CreateCart = async (input: any, repo: CartRepositoryType) => {
+export const CreateCart = async (
+  input: CartRequestInput,
+  repo: CartRepositoryType
+) => {
+  
+    // Make a call to our catalog microservice
+    // synchronised call
+    const product = await GetProductDetails(input.productId)
+    logger.info(product)
+    if(product.stock < input.qty) {
+        throw new NotFoundError("Product is out of stock");
+    }
+  
+    // const data = await repo.create(input);
+  // return { message: "created cart from service"}
+  // return data;
 
-    const data = await repo.create(input);
-    // return { message: "created cart from service"}
-    return data
-}
+  return await repo.createCart(input.customerId, {
+    productId: product.id,
+    price: product.price.toString(),
+    qty: input.qty,
+    itemName: product.name,
+    variant: product.variant
+  } as CartLineItem)
 
-export const GetCart = async (input: any,repo: CartRepositoryType) => {
-    const data = await repo.find(input);
-    return { message: "created cart from service"}
-}
+  // return product;
+};
 
-export const EditCart = async (input: any, repo: CartRepositoryType) => {
-    const data = await repo.update(input);
-    return { message: "created cart from service"}
-}
+export const GetCart = async (id: number, repo: CartRepositoryType) => {
+  const data = await repo.findCart(id);
 
-export const DeleteCart = async (input: any, repo: CartRepositoryType) => {
-    const data = await repo.delete(input);
-    return { message: "created cart from service"}
-}
+  if (!data) {
+    throw new NotFoundError("Cart Not Found")
+  }
+
+  return data;
+};
+
+export const EditCart = async (input: CartEditRequestInput, repo: CartRepositoryType) => {
+  const data = await repo.updateCart(input.id, input.qty);
+  // return { message: "created cart from service" };
+  return data
+};
+
+export const DeleteCart = async (id: number, repo: CartRepositoryType) => {
+  const data = await repo.deleteCart(id);
+  // return { message: "created cart from service" };
+  return data
+};
