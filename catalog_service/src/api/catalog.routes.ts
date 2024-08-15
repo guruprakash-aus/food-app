@@ -82,9 +82,12 @@ router.get(
       const data = await catalogService.getProduct(id);
       return res.status(200).json(data);
     } catch (error) {
-      const err = error as Error;
+      // const err = error as Error;
       // console.log(err)
-      return res.status(500).json(err.message);
+      // return res.status(500).json(err.message);
+
+      // We can implement API Gateways here for proper communications
+      return next(error)
     }
   }
 );

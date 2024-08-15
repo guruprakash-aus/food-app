@@ -18,7 +18,7 @@ GET http://localhost:8080/products/2
 Content-Type: application/json
 
 ### Update A Product
-PATCH http://localhost:8080/products/3
+PATCH http://localhost:8080/products/1
 Content-Type: application/json
 
 {

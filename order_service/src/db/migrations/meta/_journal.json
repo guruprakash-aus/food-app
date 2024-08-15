@@ -8,6 +8,13 @@
       "when": 1722991970535,
       "tag": "0000_late_killmonger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723691660354,
+      "tag": "0001_fair_lockjaw",
+      "breakpoints": true
     }
   ]
 }
