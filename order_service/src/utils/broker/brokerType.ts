@@ -7,6 +7,7 @@ export interface PublishType {
     message:Record<string, any>;
 }
 
+// Callback function
 export type MessageHandler = (input: MessageType) => void
 
 export type MessageBrokerType = {

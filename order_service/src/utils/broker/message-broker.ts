@@ -5,7 +5,8 @@ import { MessageType, OrderEvent, TOPIC_TYPE } from "../../types";
 //  Configuration Properties
 const CLIENT_ID = process.env.CLIENT_ID || "order-service";
 const GROUP_ID = process.env.GROUP_ID || "order-service-group";
-const BROKERS = [process.env._BROKER_1 || "localhost:8082"];
+// List of brokers
+const BROKERS = [process.env._BROKER_1 || "localhost:9092"];
 
 const kafka = new Kafka({
   clientId: CLIENT_ID,
@@ -50,7 +51,7 @@ const connectProducer = async <T>(): Promise<T> => {
   });
 
   await producer.connect();
-  console.log("producer connected with a new connection");
+  console.log("Producer connected with a new connection");
   return producer as unknown as T;
 };
 

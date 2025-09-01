@@ -1,5 +1,5 @@
 import axios from "axios";
-import { APIError } from "../error";
+import { NotFoundError } from "../error";
 import { logger } from "../logger";
 import { Product } from "../../dto/product.dto";
 
@@ -14,11 +14,23 @@ export const GetProductDetails = async (productId: number) => {
     return response.data as Product;
   } catch (error) {
     logger.error(error);
-    throw new APIError("Product not found");
+    throw new NotFoundError("Product not found");
   }
 
   // return {
   //     stock: 10,
   //     price: 100
   // }
+};
+
+export const GetStockDetails = async (ids: number[]) => {
+  try {
+    const response = await axios.post(`${CATALOG_BASE_URL}/products/stock`, {
+      ids,
+    });
+    return response.data as Product[];
+  } catch (error) {
+    logger.error(error);
+    throw new NotFoundError("error on getting stock details");
+  }
 };
