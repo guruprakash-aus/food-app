@@ -1,9 +1,10 @@
-import expressApp from './expressApp'
+import {ExpressApp} from './expressApp'
 import { logger } from './utils';
 
 const PORT = process.env.PORT || 8081;
 
 export const StartServer = async() => {
+    const expressApp = await ExpressApp();
 
     expressApp.listen(PORT, () => {
         logger.info(`Order Service App is listening to: ${PORT}`);

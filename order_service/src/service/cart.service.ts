@@ -3,7 +3,7 @@ import { CartEditRequestInput, CartRequestInput } from "../dto/cartRequest.dto";
 import { CartRepositoryType } from "../repository/cart.repository";
 // import { CartRepositoryType } from "../types/repository.type";
 import { logger, NotFoundError } from "../utils";
-import { GetProductDetails } from "../utils/broker";
+import { GetProductDetails, GetStockDetails } from "../utils/broker";
 
 export const CreateCart = async (
   input: CartRequestInput,
@@ -34,13 +34,40 @@ export const CreateCart = async (
 };
 
 export const GetCart = async (id: number, repo: CartRepositoryType) => {
-  const data = await repo.findCart(id);
-
-  if (!data) {
-    throw new NotFoundError("Cart Not Found")
+  // get customer cart data
+  const cart = await repo.findCart(id);
+  if (!cart) {
+    throw new NotFoundError("cart does not exist");
   }
 
-  return data;
+  // list out all line items in the cart
+  const lineItems = cart.lineItems;
+
+  if (!lineItems.length) {
+    throw new NotFoundError("cart items not found");
+  }
+
+  // verify with inventory service if the product is still available
+  const stockDetails = await GetStockDetails(
+    lineItems.map((item) => item.productId)
+  );
+
+  if (Array.isArray(stockDetails)) {
+    // update stock availability in cart line items
+    lineItems.forEach((lineItem) => {
+      const stockItem = stockDetails.find(
+        (stock) => stock.id === lineItem.productId
+      );
+      if (stockItem) {
+        lineItem.availability = stockItem.stock;
+      }
+    });
+
+    // update cart line items
+    cart.lineItems = lineItems;
+  }
+  // return updated cart data with latest stock availability
+  return cart;
 };
 
 export const EditCart = async (input: CartEditRequestInput, repo: CartRepositoryType) => {
