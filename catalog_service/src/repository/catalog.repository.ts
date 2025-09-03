@@ -55,4 +55,14 @@ export class CatalogRepository implements ICatalogRepository {
     // return Promise.reject("product not found")
     throw new NotFoundError("product not found")
   }
+
+  findStock(ids: number[]): Promise<Product[]> {
+    return this._prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
 }

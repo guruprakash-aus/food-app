@@ -52,4 +52,13 @@ export class CatalogService {
         // delete record from elastic search
         return response
     }
+
+    //  We will get product stock through elastic search
+    async getProductStock(ids: number[]) {
+        const products = await this._repository.findStock(ids);
+        if (!products) {
+            throw new Error("unable to find product stock details");
+        }
+        return products;
+  }
 }
