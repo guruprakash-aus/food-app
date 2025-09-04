@@ -15,6 +15,13 @@
       "when": 1723691660354,
       "tag": "0001_fair_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1756907005973,
+      "tag": "0002_oval_phantom_reporter",
+      "breakpoints": true
     }
   ]
 }
